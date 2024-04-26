@@ -16,7 +16,7 @@ import {
   CURRENT_STORAGE,
   HAS_AWS_S3_STORAGE,
   HAS_VERCEL_BLOB_STORAGE,
-  HAS_CLOUDFLARE_R2_STORAGE,
+  HAS_CLOUDFLARE_R2_STORAGE, HAS_TEBI_STORAGE,
 } from '@/site/config';
 import { generateNanoid } from '@/utility/nanoid';
 import {
@@ -27,6 +27,7 @@ import {
   isUrlFromCloudflareR2,
 } from './cloudflare-r2';
 import { PATH_API_PRESIGNED_URL } from '@/site/paths';
+import {isUrlFromTEBI, TEBI_BASE_URL, tebiCopy, tebiDelete, tebiList} from '@/services/storage/tebi';
 
 export const generateStorageId = () => generateNanoid(16);
 
@@ -38,13 +39,15 @@ export type StorageListResponse = {
 export type StorageType =
   'vercel-blob' |
   'aws-s3' |
-  'cloudflare-r2';
+  'cloudflare-r2' | 'tebi';
+
 
 export const labelForStorage = (type: StorageType): string => {
   switch (type) {
   case 'vercel-blob': return 'Vercel Blob';
   case 'cloudflare-r2': return 'Cloudflare R2';
   case 'aws-s3': return 'AWS S3';
+  case 'tebi': return 'TEBI';
   }
 };
 
@@ -53,6 +56,7 @@ export const baseUrlForStorage = (type: StorageType) => {
   case 'vercel-blob': return VERCEL_BLOB_BASE_URL;
   case 'cloudflare-r2': return CLOUDFLARE_R2_BASE_URL_PUBLIC;
   case 'aws-s3': return AWS_S3_BASE_URL;
+  case 'tebi': return TEBI_BASE_URL;
   }
 };
 
@@ -61,7 +65,9 @@ export const storageTypeFromUrl = (url: string): StorageType => {
     return 'cloudflare-r2';
   } else if (isUrlFromAwsS3(url)) {
     return 'aws-s3';
-  } else {
+  } else if (isUrlFromTEBI(url)) {
+    return 'tebi';
+  }else {
     return 'vercel-blob';
   }
 };
@@ -87,6 +93,8 @@ export const fileNameForStorageUrl = (url: string) => {
     return url.replace(`${CLOUDFLARE_R2_BASE_URL_PUBLIC}/`, '');
   case 'aws-s3':
     return url.replace(`${AWS_S3_BASE_URL}/`, '');
+  case 'tebi':
+    return url.replace(`${TEBI_BASE_URL}/`, '');
   }
 };
 
@@ -114,9 +122,10 @@ export const uploadFromClientViaPresignedUrl = async (
 
   const url = await fetch(`${PATH_API_PRESIGNED_URL}/${key}`)
     .then((response) => response.text());
-
-  return fetch(url, { method: 'PUT', body: file })
-    .then(() => `${baseUrlForStorage(CURRENT_STORAGE)}/${key}`);
+  return fetch(url.replace("qiangzi.", ""), { method: 'PUT', body: file })
+    .then(() => {
+      return `${baseUrlForStorage(CURRENT_STORAGE)}/${key}`;
+    });
 };
 
 export const uploadPhotoFromClient = async (
@@ -124,7 +133,8 @@ export const uploadPhotoFromClient = async (
   extension = 'jpg',
 ) => (
   CURRENT_STORAGE === 'cloudflare-r2' ||
-  CURRENT_STORAGE === 'aws-s3'
+  CURRENT_STORAGE === 'aws-s3' ||
+  CURRENT_STORAGE === 'tebi'
 )
   ? uploadFromClientViaPresignedUrl(file, PREFIX_UPLOAD, extension, true)
   : vercelBlobUploadFromClient(file, `${PREFIX_UPLOAD}.${extension}`);
@@ -156,6 +166,9 @@ export const convertUploadToPhoto = async (
   case 'aws-s3':
     url = await awsS3Copy(uploadUrl, photoPath, photoId === undefined);
     break;
+  case 'tebi':
+    url = await tebiCopy(uploadUrl, photoPath, photoId === undefined);
+    break;
   }
 
   // If successful, delete original file
@@ -169,6 +182,9 @@ export const convertUploadToPhoto = async (
       break;
     case 'aws-s3':
       await awsS3Delete(getFileNameFromStorageUrl(uploadUrl));
+      break;
+    case 'tebi':
+      await tebiDelete(getFileNameFromStorageUrl(uploadUrl));
       break;
     }
   }
@@ -184,6 +200,8 @@ export const deleteStorageUrl = (url: string) => {
     return cloudflareR2Delete(getFileNameFromStorageUrl(url));
   case 'aws-s3':
     return awsS3Delete(getFileNameFromStorageUrl(url));
+  case 'tebi':
+    return tebiDelete(getFileNameFromStorageUrl(url));
   }
 };
 
@@ -200,6 +218,10 @@ const getStorageUrlsForPrefix = async (prefix = '') => {
   }
   if (HAS_CLOUDFLARE_R2_STORAGE) {
     urls.push(...await cloudflareR2List(prefix)
+      .catch(() => []));
+  }
+  if(HAS_TEBI_STORAGE) {
+    urls.push(...await tebiList(prefix)
       .catch(() => []));
   }
 

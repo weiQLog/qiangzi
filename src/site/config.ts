@@ -60,10 +60,15 @@ export const HAS_CLOUDFLARE_R2_STORAGE =
   HAS_CLOUDFLARE_R2_STORAGE_CLIENT &&
   (process.env.CLOUDFLARE_R2_ACCESS_KEY ?? '').length > 0 &&
   (process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY ?? '').length > 0;
+export const HAS_TEBI_STORAGE =
+    (process.env.NEXT_PUBLIC_STORAGE_PREFERENCE ?? '') === 'tebi' &&
+    (process.env.TEBI_ACCESS_KEY ?? '').length > 0 &&
+    (process.env.TEBI_SECRET_ACCESS_KEY ?? '').length > 0;
 
 // STORAGE: AWS S3
 // Includes separate check for client-side usage, i.e., url construction
 export const HAS_AWS_S3_STORAGE_CLIENT =
+    (process.env.NEXT_PUBLIC_STORAGE_PREFERENCE ?? '') === 'aws-s3' &&
   (process.env.NEXT_PUBLIC_AWS_S3_BUCKET ?? '').length > 0 &&
   (process.env.NEXT_PUBLIC_AWS_S3_REGION ?? '').length > 0;
 export const HAS_AWS_S3_STORAGE =
@@ -79,14 +84,21 @@ export const HAS_MULTIPLE_STORAGE_PROVIDERS = [
 
 // Storage preference requires client-available keys
 // so it can be reached in the browser when uploading
-export const CURRENT_STORAGE: StorageType =
-  (process.env.NEXT_PUBLIC_STORAGE_PREFERENCE as StorageType | undefined) || (
-    HAS_CLOUDFLARE_R2_STORAGE_CLIENT
-      ? 'cloudflare-r2'
-      : HAS_AWS_S3_STORAGE_CLIENT
-        ? 'aws-s3'
-        : 'vercel-blob'
-  );
+export const CURRENT_STORAGE: StorageType = 'tebi';
+// let CURRENT_STORAGE: StorageType;
+//
+// if (HAS_CLOUDFLARE_R2_STORAGE_CLIENT) {
+//   CURRENT_STORAGE = 'cloudflare-r2';
+// } else if (HAS_AWS_S3_STORAGE_CLIENT) {
+//   CURRENT_STORAGE = 'aws-s3';
+// } else if (HAS_TEBI_STORAGE) {
+//   CURRENT_STORAGE = 'tebi';
+// } else {
+//   CURRENT_STORAGE = 'vercel-blob';
+// }
+// export { CURRENT_STORAGE };
+
+
 
 // SETTINGS
 

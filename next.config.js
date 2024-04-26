@@ -16,6 +16,8 @@ const HOSTNAME_AWS_S3 =
     ? `${process.env.NEXT_PUBLIC_AWS_S3_BUCKET}.s3.${process.env.NEXT_PUBLIC_AWS_S3_REGION}.amazonaws.com`
     : undefined;
 
+const HOSTNAME_TEBI =  `s3.tebi.io`;
+
 const createRemotePattern = (hostname) => hostname
   ? {
     protocol: 'https',
@@ -32,7 +34,8 @@ const nextConfig = {
     remotePatterns: []
       .concat(createRemotePattern(HOSTNAME_VERCEL_BLOB))
       .concat(createRemotePattern(HOSTNAME_CLOUDFLARE_R2))
-      .concat(createRemotePattern(HOSTNAME_AWS_S3)),
+      .concat(createRemotePattern(HOSTNAME_AWS_S3))
+      .concat(createRemotePattern(HOSTNAME_TEBI)),
     minimumCacheTTL: 31536000,
   },
 };

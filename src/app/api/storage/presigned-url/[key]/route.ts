@@ -9,6 +9,7 @@ import {
 } from '@/services/storage/cloudflare-r2';
 import { CURRENT_STORAGE } from '@/site/config';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import {tebiClient, tebiPutObjectCommandForKey} from '@/services/storage/tebi';
 
 export const runtime = 'edge';
 
@@ -18,13 +19,7 @@ export async function GET(
 ) {
   const session = await auth();
   if (session?.user && key) {
-    const url = await getSignedUrl(
-      CURRENT_STORAGE === 'cloudflare-r2'
-        ? cloudflareR2Client()
-        : awsS3Client(),
-      CURRENT_STORAGE === 'cloudflare-r2'
-        ? cloudflareR2PutObjectCommandForKey(key)
-        : awsS3PutObjectCommandForKey(key),
+    const url = await getSignedUrl(tebiClient(), tebiPutObjectCommandForKey(key),
       { expiresIn: 3600 }
     );
     return new Response(

@@ -59,6 +59,7 @@ export default function PhotoUpload({
                 )
                   .then(async url => {
                     if (isLastBlob) {
+                      alert(url)
                       await onLastUpload?.();
                       if (hasMultipleUploads) {
                         // Redirect to view multiple uploads
