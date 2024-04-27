@@ -110,6 +110,7 @@ export const isUploadPathnameValid = (pathname?: string) =>
 const getFileNameFromStorageUrl = (url: string) =>
   (new URL(url).pathname.match(/\/(.+)$/)?.[1]) ?? '';
 
+const TEBI_BUCKET = process.env.NEXT_PUBLIC_TEBI_BUCKET ?? '';
 export const uploadFromClientViaPresignedUrl = async (
   file: File | Blob,
   fileName: string,
@@ -122,8 +123,11 @@ export const uploadFromClientViaPresignedUrl = async (
 
   const url = await fetch(`${PATH_API_PRESIGNED_URL}/${key}`)
     .then((response) => response.text());
-  return fetch(url.replace("qiangzi.", ""), { method: 'PUT', body: file })
+  return fetch(url, { method: 'PUT', body: file })
     .then(() => {
+      if(CURRENT_STORAGE === 'tebi' && TEBI_BUCKET) {
+        return `${baseUrlForStorage(CURRENT_STORAGE)}/${TEBI_BUCKET}/${key}`;
+      }
       return `${baseUrlForStorage(CURRENT_STORAGE)}/${key}`;
     });
 };

@@ -232,12 +232,11 @@ export const convertFormDataToPhotoDbInsert = (
   const photoForm = formData instanceof FormData
     ? Object.fromEntries(formData) as PhotoFormData
     : formData;
-
   const tags = convertStringToArray(photoForm.tags) ?? [];
   if (photoForm.favorite === 'true') {
     tags.push(TAG_FAVS);
   }
-  
+
   // Parse FormData:
   // - remove server action ID
   // - remove empty strings

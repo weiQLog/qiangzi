@@ -38,17 +38,18 @@ import { AI_IMAGE_QUERIES, AiImageQuery } from './ai';
 import { streamOpenAiImageQuery } from '@/services/openai';
 
 export async function createPhotoAction(formData: FormData) {
+  console.log(formData)
   return safelyRunAdminServerAction(async () => {
     const photo = convertFormDataToPhotoDbInsert(formData, true);
 
     const updatedUrl = await convertUploadToPhoto(photo.url, photo.id);
-  
+
     if (updatedUrl) { photo.url = updatedUrl; }
-  
+
     await sqlInsertPhoto(photo);
-  
+
     revalidateAllKeysAndPaths();
-  
+
     redirect(PATH_ADMIN_PHOTOS);
   });
 }

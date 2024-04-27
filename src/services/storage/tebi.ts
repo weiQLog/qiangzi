@@ -6,13 +6,14 @@ import {
   PutObjectCommand,
 } from '@aws-sdk/client-s3';
 import { StorageListResponse, generateStorageId } from '.';
+import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
 
 const TEBI_BUCKET = process.env.NEXT_PUBLIC_TEBI_BUCKET ?? '';
 const TEBI_REGION = process.env.NEXT_PUBLIC_TEBI_REGION ?? '';
 const TEBI_ACCESS_KEY = process.env.TEBI_ACCESS_KEY ?? '';
 const TEBI_SECRET_ACCESS_KEY = process.env.TEBI_SECRET_ACCESS_KEY ?? '';
 
-export const TEBI_BASE_URL = `https://s3.tebi.io`;
+export const TEBI_BASE_URL = 'https://s3.tebi.io';
 
 export const tebiClient = () => new S3Client({
   endpoint: 'https://s3.tebi.io',
@@ -23,7 +24,7 @@ export const tebiClient = () => new S3Client({
   },
 });
 
-const urlForKey = (key?: string) => `${TEBI_BASE_URL}/${key}`;
+const urlForKey = (key?: string) => `${TEBI_BASE_URL}/qiangzi/${key}`;
 
 export const isUrlFromTEBI = (url?: string) =>
   TEBI_BASE_URL && url?.startsWith(TEBI_BASE_URL);
@@ -41,6 +42,12 @@ export const tebiCopy = async (
   const Key = addRandomSuffix
     ? `${name}-${generateStorageId()}.${extension}`
     : fileNameDestination;
+  console.log("Key:::::::::::" + name);
+  console.log("extension:::::::::::" + extension);
+  console.log("fileNameSource:::::::::::" + fileNameSource);
+  console.log("Key:::::::::::" + Key);
+  console.log("TEBI_ACCESS_KEY:::::::::::" + TEBI_ACCESS_KEY);
+  console.log("TEBI_SECRET_ACCESS_KEY:::::::::::" + TEBI_SECRET_ACCESS_KEY);
   return tebiClient().send(new CopyObjectCommand({
     Bucket: TEBI_BUCKET,
     CopySource: fileNameSource,
