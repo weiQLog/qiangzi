@@ -42,19 +42,12 @@ export const tebiCopy = async (
   const Key = addRandomSuffix
     ? `${name}-${generateStorageId()}.${extension}`
     : fileNameDestination;
-  console.log("Key:::::::::::" + name);
-  console.log("extension:::::::::::" + extension);
-  console.log("fileNameSource:::::::::::" + fileNameSource);
-  console.log("Key:::::::::::" + Key);
-  console.log("TEBI_ACCESS_KEY:::::::::::" + TEBI_ACCESS_KEY);
-  console.log("TEBI_SECRET_ACCESS_KEY:::::::::::" + TEBI_SECRET_ACCESS_KEY);
   return tebiClient().send(new CopyObjectCommand({
     Bucket: TEBI_BUCKET,
     CopySource: fileNameSource,
     Key,
     ACL: 'public-read',
-  }))
-    .then(() => urlForKey(fileNameDestination));
+  })).then(() => urlForKey(fileNameDestination));
 };
 
 export const tebiList = async (

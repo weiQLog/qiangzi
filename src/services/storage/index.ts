@@ -171,7 +171,7 @@ export const convertUploadToPhoto = async (
     url = await awsS3Copy(uploadUrl, photoPath, photoId === undefined);
     break;
   case 'tebi':
-    url = await tebiCopy(uploadUrl, photoPath, photoId === undefined);
+    url = uploadUrl;
     break;
   }
 
