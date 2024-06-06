@@ -134,12 +134,15 @@ export async function renamePhotoTagGloballyAction(formData: FormData) {
   });
 }
 
+/**
+ * 删除图片
+ * @param formData 
+ * @returns 
+ */
 export async function deleteBlobPhotoAction(formData: FormData) {
   return safelyRunAdminServerAction(async () => {
     await deleteStorageUrl(formData.get('url') as string);
-
     revalidateAdminPaths();
-
     if (formData.get('redirectToPhotos') === 'true') {
       redirect(PATH_ADMIN_PHOTOS);
     }

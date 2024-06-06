@@ -82,6 +82,7 @@ export default function ImageInput({
             disabled={loading}
             multiple
             onChange={async e => {
+              // 上传file
               onStart?.();
               const { files } = e.currentTarget;
               if (files && files.length > 0) {

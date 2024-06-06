@@ -110,7 +110,21 @@ export const isUploadPathnameValid = (pathname?: string) =>
 const getFileNameFromStorageUrl = (url: string) =>
   (new URL(url).pathname.match(/\/(.+)$/)?.[1]) ?? '';
 
+const getFileNameFromTebiUrl = (url: string) =>
+  {
+    return (new URL(url).pathname.match(/[^/]+$/)?.[0]) ?? '';
+  }
+
 const TEBI_BUCKET = process.env.NEXT_PUBLIC_TEBI_BUCKET ?? '';
+
+/**
+ * 上传file到oss
+ * @param file 文件
+ * @param fileName 文件名
+ * @param extension 扩展名
+ * @param addRandomSuffix 是否添加随机前缀
+ * @returns 
+ */
 export const uploadFromClientViaPresignedUrl = async (
   file: File | Blob,
   fileName: string,
@@ -132,6 +146,12 @@ export const uploadFromClientViaPresignedUrl = async (
     });
 };
 
+/**
+ * 从客户端post图片到服务器
+ * @param file 图片
+ * @param extension 扩展名 
+ * @returns 
+ */
 export const uploadPhotoFromClient = async (
   file: File | Blob,
   extension = 'jpg',
@@ -205,7 +225,7 @@ export const deleteStorageUrl = (url: string) => {
   case 'aws-s3':
     return awsS3Delete(getFileNameFromStorageUrl(url));
   case 'tebi':
-    return tebiDelete(getFileNameFromStorageUrl(url));
+    return tebiDelete(getFileNameFromTebiUrl(url));
   }
 };
 

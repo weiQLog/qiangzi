@@ -46,9 +46,19 @@ export type FujifilmSimulation =
   FujifilmSimulationFromSaturation |
   FujifilmMode;
 
+/**
+ * 判断给定的EXIF数据是否来自富士相机
+ * @param data exif数据
+ * @returns 
+ */
 export const isExifForFujifilm = (data: ExifData) =>
   data.tags?.Make === MAKE_FUJIFILM;
 
+/**
+ * 根据特定的数值返回对应的胶片模拟类型
+ * @param value 
+ * @returns 
+ */
 const getFujifilmSimulationFromSaturation = (
   value?: number,
 ): FujifilmSimulationFromSaturation | undefined => {
@@ -65,6 +75,11 @@ const getFujifilmSimulationFromSaturation = (
   }
 };
 
+/**
+ * 根据特定的数值返回对应的胶片模拟类型
+ * @param value 
+ * @returns 
+ */
 const getFujifilmMode = (
   value?: number,
 ): FujifilmMode | undefined => {
