@@ -20,12 +20,7 @@ export default function useAiImageQuery(
           imageBase64,
           query,
         );
-        for await (const text of readStreamableValue(textStream)) {
-          setText((text ?? '')
-            .replaceAll('\n', ' ')
-            .replaceAll('"', '')
-            .replace(/\.$/, ''));
-        }
+        setText((text ?? textStream));
         setIsLoading(false);
       } catch (e) {
         setError(e);

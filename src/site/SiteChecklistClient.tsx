@@ -286,7 +286,7 @@ export default function SiteChecklistClient({
           Store your OpenAI secret key in order to add experimental support
           for AI-generated text descriptions and enable an invisible field
           called {'"Semantic Description"'} used to support CMD-K search
-          {renderEnvVars(['OPENAI_SECRET_KEY'])}
+          {renderEnvVars(['ANTHROPIC_API_KEY'])}
         </ChecklistRow>
         <ChecklistRow
           title="Enable Rate Limiting"
