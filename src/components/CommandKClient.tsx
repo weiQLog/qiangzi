@@ -137,21 +137,21 @@ export default function CommandKClient({
   }, [isOpen, setShouldRespondToKeyboardCommands]);
 
   const clientSections: CommandKSection[] = [{
-    heading: 'Theme',
+    heading: '主题',
     accessory: <IoInvertModeSharp
       size={14}
       className="translate-y-[0.5px] translate-x-[-1px]"
     />,
     items: [{
-      label: 'Use System',
+      label: '系統預設',
       annotation: <BiDesktop />,
       action: () => setTheme('system'),
     }, {
-      label: 'Light Mode',
+      label: '亮色模式',
       annotation: <BiSun size={16} className="translate-x-[1.25px]" />,
       action: () => setTheme('light'),
     }, {
-      label: 'Dark Mode',
+      label: '深色模式',
       annotation: <BiMoon className="translate-x-[1px]" />,
       action: () => setTheme('dark'),
     }],
@@ -159,10 +159,10 @@ export default function CommandKClient({
 
   if (showDebugTools) {
     clientSections.push({
-      heading: 'Debug Tools',
+      heading: '调试工具',
       accessory: <RiToolsFill size={16} className="translate-x-[-1px]" />,
       items: [{
-        label: 'Toggle Baseline Grid',
+        label: '切換基線網格',
         action: () => setShouldShowBaselineGrid?.(prev => !prev),
       }],
     });
@@ -172,7 +172,7 @@ export default function CommandKClient({
     <Command.Dialog
       open={isOpen}
       onOpenChange={setIsOpen}
-      label="Global Command Menu"
+      label="全局命令選單"
       filter={(value, search, keywords) => {
         const searchFormatted = search.trim().toLocaleLowerCase();
         return (
@@ -200,7 +200,7 @@ export default function CommandKClient({
                 'placeholder:text-gray-400/80',
                 'placeholder:dark:text-gray-700',
               )}
-              placeholder="Search photos, views, settings ..."
+              placeholder="搜索相片，视图，属性"
               disabled={isPending}
             />
             {isLoading && !isPending &&

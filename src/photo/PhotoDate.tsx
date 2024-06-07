@@ -7,6 +7,7 @@ export default function PhotoDate({
 }: {
   photo: Photo
 }) {
+  // 缓存计算结果
   const date = useMemo(() => {
     const date = new Date(takenAtNaive);
     return isNaN(date.getTime()) ? new Date() : date;

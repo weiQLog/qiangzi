@@ -22,7 +22,7 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        'mono': ['var(--font-ibm-plex-mono)', ...defaultTheme.fontFamily.mono],
+        'mono': ['var(--font-noto-sans)', ...defaultTheme.fontFamily.mono],
       },
       animation: {
         'rotate-pulse':

@@ -31,19 +31,19 @@ export default async function AdminLayout({
   ]);
 
   const navItemPhotos = {
-    label: 'Photos',
+    label: '相片',
     href: PATH_ADMIN_PHOTOS,
     count: countPhotos,
   };
 
   const navItemUploads = {
-    label: 'Uploads',
+    label: '已轉入',
     href: PATH_ADMIN_UPLOADS,
     count: countUploads,
   };
 
   const navItemTags = {
-    label: 'Tags',
+    label: '標籤',
     href: PATH_ADMIN_TAGS,
     count: countTags,
   };

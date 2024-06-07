@@ -1,4 +1,5 @@
 import { formatDate } from '@/utility/date';
+import moment from 'moment';
 
 export default function ResponsiveDate({
   date,
@@ -9,11 +10,11 @@ export default function ResponsiveDate({
     <>
       {/* Mobile */}
       <span className="inline-block sm:hidden">
-        {formatDate(date, true)}
+        {moment(date).format('YYYY-MM-DD HH:mm:ss')}
       </span>
       {/* Desktop */}
       <span className="hidden sm:inline-block">
-        {formatDate(date)}
+        {moment(date).format('YYYY-MM-DD HH:mm:ss')}
       </span>
     </>
   );

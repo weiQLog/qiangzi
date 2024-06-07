@@ -47,17 +47,17 @@ export default function FooterClient({
                       <div>{userEmail}</div>
                       <form action={signOutAction}>
                         <SubmitButtonWithStatus styleAsLink>
-                          Sign out
+                          登出
                         </SubmitButtonWithStatus>
                       </form>
                     </>}
                   </>
                   : <>
-                    <Link href={pathForAdminPhotos()}>
+                    {/* <Link href={pathForAdminPhotos()}>
                       Admin
                     </Link>
                     {SHOW_REPO_LINK &&
-                      <RepoLink />}
+                      <RepoLink />} */}
                   </>}
               </div>
               <div className="flex items-center h-4">

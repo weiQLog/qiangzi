@@ -71,8 +71,8 @@ export default function ImageInput({
                 />}
             </span>
             {loading
-              ? 'Uploading'
-              : 'Upload Photos'}
+              ? '上傳中'
+              : '上傳相片'}
           </span>
           <input
             id={INPUT_ID}

@@ -52,7 +52,7 @@ export default async function CommandK() {
   const isAdminLoggedIn = Boolean(session?.user?.email);
 
   const SECTION_TAGS: CommandKSection = {
-    heading: 'Tags',
+    heading: '標籤',
     accessory: <FaTag
       size={10}
       className="translate-x-[1px] translate-y-[0.75px]"
@@ -66,7 +66,7 @@ export default async function CommandK() {
   };
 
   const SECTION_CAMERAS: CommandKSection = {
-    heading: 'Cameras',
+    heading: '攝影設備',
     accessory: <IoMdCamera />,
     items: cameras.map(({ camera, count }) => ({
       label: formatCameraText(camera),
@@ -77,7 +77,7 @@ export default async function CommandK() {
   };
 
   const SECTION_FILM: CommandKSection = {
-    heading: 'Film Simulations',
+    heading: '底片風格',
     accessory: <span className="w-3">
       <PhotoFilmSimulationIcon className="translate-y-[0.5px]" />
     </span>,
@@ -90,7 +90,7 @@ export default async function CommandK() {
   };
 
   const SECTION_PAGES: CommandKSection = {
-    heading: 'Pages',
+    heading: '頁面',
     accessory: <HiDocumentText size={15} className="translate-x-[-1px]" />,
     items: ([{
       label: 'Home',
@@ -102,7 +102,7 @@ export default async function CommandK() {
   };
 
   const SECTION_ADMIN: CommandKSection = {
-    heading: 'Admin',
+    heading: '管理員',
     accessory: <BiSolidUser size={15} className="translate-x-[-1px]" />,
     items: isAdminLoggedIn
       ? [{
@@ -122,11 +122,11 @@ export default async function CommandK() {
         annotation: <BiLockAlt />,
         path: PATH_ADMIN_CONFIGURATION,
       }, {
-        label: 'Sign Out',
+        label: '登出',
         action: signOutAction,
       }]
       : [{
-        label: 'Sign In',
+        label: '登入',
         path: PATH_SIGN_IN,
       }],
   };
@@ -151,7 +151,7 @@ export default async function CommandK() {
       const photos = (await getPhotos({ query, limit: 10 }));
       return photos.length > 0
         ? [{
-          heading: 'Photos',
+          heading: '相片',
           accessory: <TbPhoto size={14} />,
           items: photos.map(photo => ({
             label: titleForPhoto(photo),

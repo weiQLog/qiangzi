@@ -1,7 +1,7 @@
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { clsx } from 'clsx/lite';
-import { IBM_Plex_Mono } from 'next/font/google';
+import { IBM_Plex_Mono, Noto_Sans  } from 'next/font/google';
 import { Metadata } from 'next';
 import { BASE_URL, SITE_DESCRIPTION, SITE_TITLE } from '@/site/config';
 import AppStateProvider from '@/state/AppStateProvider';
@@ -22,6 +22,11 @@ const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin'],
   weight: ['400', '500', '700'],
   variable: '--font-ibm-plex-mono',
+});
+const notoSans = Noto_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-noto-sans',
 });
 
 export const metadata: Metadata = {
@@ -73,7 +78,7 @@ export default function RootLayout({
       // next-themes behavior
       suppressHydrationWarning
     >
-      <body className={ibmPlexMono.variable}>
+      <body className={notoSans.variable}>
         <AppStateProvider>
           <ThemeProvider attribute="class">
             <main className={clsx(

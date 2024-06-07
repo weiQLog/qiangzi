@@ -172,7 +172,7 @@ export const altTextForPhoto = (photo: Photo) =>
   photo.semanticDescription || titleForPhoto(photo);
 
 export const photoLabelForCount = (count: number) =>
-  count === 1 ? 'Photo' : 'Photos';
+  count === 1 ? '张相片' : '张相片';
 
 export const photoQuantityText = (count: number, includeParentheses = true) =>
   includeParentheses
