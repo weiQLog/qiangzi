@@ -43,7 +43,7 @@ export type AiImageQuery =
   'description-semantic';
 
 export const AI_IMAGE_QUERIES: Record<AiImageQuery, string> = {
-  'title': 'Write a short title for this image in 3 words or less',
+  'title': 'Write a short title for this image in 5 words or less',
   'caption': 'Write a pithy caption for this image in 6 words or less and no punctuation',
   'title-and-caption': 'Write a short title and pithy caption of 8 words or less for this image, using the format Title: "title" Caption: "caption"',
   'tags': 'Describe this image three or less comma-separated keywords with no adjective or adverbs',

@@ -9,6 +9,7 @@
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.22.0",
     "@aws-sdk/client-s3": "3.556.0",
     "@aws-sdk/s3-request-presigner": "3.556.0",
     "@next/bundle-analyzer": "14.2.2",

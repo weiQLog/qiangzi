@@ -105,6 +105,12 @@ export const revalidateAdminPaths = () => {
 
 // Cache
 
+/**
+ * 从缓存中获取图片
+ * 用unstable_cache 包装getPhotos并立即执行包装后的函数并通过parseCachedPhotosDates处理时间
+ * @param args 
+ * @returns 
+ */
 export const getPhotosCached = (
   ...args: Parameters<typeof getPhotos>
 ) => unstable_cache(

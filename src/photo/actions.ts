@@ -36,6 +36,7 @@ import { convertPhotoToPhotoDbInsert } from '.';
 import { safelyRunAdminServerAction } from '@/auth';
 import { AI_IMAGE_QUERIES, AiImageQuery } from './ai';
 import { streamOpenAiImageQuery } from '@/services/openai';
+import { streamClaudeAiImageQuery } from '@/services/claudeai';
 
 export async function createPhotoAction(formData: FormData) {
   console.log(formData)
@@ -193,5 +194,5 @@ export async function streamAiImageQueryAction(
   query: AiImageQuery,
 ) {
   return safelyRunAdminServerAction(async () =>
-    streamOpenAiImageQuery(imageBase64, AI_IMAGE_QUERIES[query]));
+    streamClaudeAiImageQuery(imageBase64, AI_IMAGE_QUERIES[query]));
 }

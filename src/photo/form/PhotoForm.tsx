@@ -361,14 +361,14 @@ export default function PhotoForm({
             className="button"
             href={type === 'edit' ? PATH_ADMIN_PHOTOS : PATH_ADMIN_UPLOADS}
           >
-            Cancel
+            取消
           </Link>
           <SubmitButtonWithStatus
             disabled={!canFormBeSubmitted}
             onFormStatusChange={onFormStatusChange}
             primary
           >
-            {type === 'create' ? 'Create' : 'Update'}
+            {type === 'create' ? 'Post' : 'Update'}
           </SubmitButtonWithStatus>
           <div className={clsx(
             'absolute -top-16 -left-2 right-0 bottom-0 -z-10',
