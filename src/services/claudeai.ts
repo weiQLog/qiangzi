@@ -64,7 +64,10 @@ export const streamClaudeAiImageQuery = async (
             ]
           });
         console.log(`claudeai: `, msg);
-        return msg.content
+        if(msg.content.length > 0) {
+          return msg.content[0].type === "text" ? msg.content[0].text : "";
+        }
+        return "";
       }
       return "";
     });
