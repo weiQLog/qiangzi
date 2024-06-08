@@ -42,7 +42,6 @@ export const streamClaudeAiImageQuery = async (
       }
   
       if (provider) {
-        console.log(`provider.messages.create`, removeBase64Prefix(imageBase64));
         let msg = await provider.messages.create({
             model: "claude-3-opus-20240229",
             max_tokens: 1000,
@@ -64,6 +63,7 @@ export const streamClaudeAiImageQuery = async (
               }
             ]
           });
+        console.log(`claudeai: `, msg);
         return msg.content
       }
       return "";

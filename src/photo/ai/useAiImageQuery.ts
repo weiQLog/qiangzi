@@ -24,6 +24,7 @@ export default function useAiImageQuery(
         setText((text ?? textStream));
         setIsLoading(false);
       } catch (e) {
+        console.log("出错", e);
         setError(e);
         setIsLoading(false);
       }
