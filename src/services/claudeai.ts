@@ -64,7 +64,7 @@ export const streamClaudeAiImageQuery = async (
               }
             ]
           });
-        console.log(`provider.messages.msg`, msg);
+        return msg.content
       }
       return "";
     });
