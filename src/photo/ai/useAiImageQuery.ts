@@ -16,12 +16,15 @@ export default function useAiImageQuery(
       setIsLoading(true);
       setText('');
       try {
-        const textStream = await streamAiImageQueryAction(
+        streamAiImageQueryAction(
           imageBase64,
           query,
-        );
-        console.log("查询结果", textStream);
-        setText((text ?? textStream));
+        ).then(async (textStream) => {
+            console.log("查询结果", textStream);
+            setText((textStream ?? text));
+        });
+        // console.log("查询结果", textStream);
+        // setText((textStream ?? text));
         setIsLoading(false);
       } catch (e) {
         console.log("出错", e);
