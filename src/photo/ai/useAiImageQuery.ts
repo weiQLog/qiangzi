@@ -20,6 +20,7 @@ export default function useAiImageQuery(
           imageBase64,
           query,
         );
+        console.log("查询结果", textStream);
         setText((text ?? textStream));
         setIsLoading(false);
       } catch (e) {
