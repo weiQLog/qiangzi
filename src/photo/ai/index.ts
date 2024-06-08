@@ -43,14 +43,14 @@ export type AiImageQuery =
   'description-semantic';
 
 export const AI_IMAGE_QUERIES: Record<AiImageQuery, string> = {
-  'title': '为这张图片取一个5个字以内的简短标题',
-  'caption': '为这张图片取一个6个字以内的短文本描述',
-  'title-and-caption': '用8个字以内的格式写一个简短的标题和简洁的说明，格式为 标题："title" 说明："caption"',
-  'tags': '用三个或更少的逗号分隔的关键词描述这个图片，不要用形容词或副词',
-  'description-small': '简洁地描述这个图片，不要使用开头的文字“这张图片展示了”或“这是……的图片”',
-  'description': '描述这个图片',
-  'description-large': '详细描述这个图片',
-  'description-semantic': '列出这个图片中的最多5个物品，用comma-separated分隔，不需要描述',
+  'title': '用中文回复，为这张图片取一个5个字以内的简短标题',
+  'caption': '用中文回复，为这张图片取一个6个字以内的短文本描述',
+  'title-and-caption': '用中文回复，用8个字以内的格式写一个简短的标题和简洁的说明，格式为 标题："title" 说明："caption"',
+  'tags': '用中文回复，用三个或更少的逗号分隔的关键词描述这个图片，不要用形容词或副词',
+  'description-small': '用中文回复，简洁地描述这个图片，不要使用开头的文字“这张图片展示了”或“这是……的图片”',
+  'description': '用中文回复，描述这个图片',
+  'description-large': '用中文回复，详细描述这个图片',
+  'description-semantic': '用中文回复，列出这个图片中的最多5个物品，用comma-separated分隔，不需要描述',
 };
 
 export const parseTitleAndCaption = (text: string) => {
