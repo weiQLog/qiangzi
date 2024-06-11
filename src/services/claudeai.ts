@@ -40,9 +40,9 @@ export const streamClaudeAiImageQuery = async (
           throw new Error('OpenAI rate limit exceeded');
         }
       }
-  
+    
       if (provider) {
-        let msg = await provider.messages.create({
+        return await provider.messages.create({
             model: "claude-3-opus-20240229",
             max_tokens: 1000,
             temperature: 0,

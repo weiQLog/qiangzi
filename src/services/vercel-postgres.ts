@@ -15,6 +15,11 @@ import { PRIORITY_ORDER_ENABLED } from '@/site/config';
 
 const PHOTO_DEFAULT_LIMIT = 100;
 
+/**
+ * 这个函数将一个字符串数组转换为 PostgreSQL 数组字符串格式，例如 ['tag1', 'tag2'] 会被转换为 '{tag1,tag2}'
+ * @param array ['tag1', 'tag2']
+ * @returns 
+ */
 export const convertArrayToPostgresString = (array?: string[]) => array
   ? `{${array.join(',')}}`
   : null;

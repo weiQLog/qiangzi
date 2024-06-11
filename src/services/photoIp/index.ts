@@ -1,0 +1,1 @@
+import { PhotoIpDbInsert } from "@/photo/photoIp";
