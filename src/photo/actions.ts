@@ -8,6 +8,7 @@ import {
   sqlRenamePhotoTagGlobally,
   getPhoto,
 } from '@/services/vercel-postgres';
+
 import {
   PhotoFormData,
   convertFormDataToPhotoDbInsert,
@@ -37,9 +38,10 @@ import { safelyRunAdminServerAction } from '@/auth';
 import { AI_IMAGE_QUERIES, AiImageQuery } from './ai';
 import { streamOpenAiImageQuery } from '@/services/openai';
 import { streamClaudeAiImageQuery } from '@/services/claudeai';
+import { NextApiRequest, NextApiResponse } from 'next/types';
+import { sqlInsertPhotosIp } from '@/services/photoIp';
 
 export async function createPhotoAction(formData: FormData) {
-  console.log(formData)
   return safelyRunAdminServerAction(async () => {
     const photo = convertFormDataToPhotoDbInsert(formData, true);
 
@@ -48,6 +50,7 @@ export async function createPhotoAction(formData: FormData) {
     if (updatedUrl) { photo.url = updatedUrl; }
 
     await sqlInsertPhoto(photo);
+    // await sqlInsertPhotosIp(photo.id, req, res);
 
     revalidateAllKeysAndPaths();
 

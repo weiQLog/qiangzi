@@ -1,8 +1,6 @@
 import { db, sql } from '@vercel/postgres';
-
-
 export interface PhotoIpDbInsert {
-    id: number;
+    photo_id: string;
     ip: string;
     network: string; // CIDR notation
     version: string; // IP version, e.g., 'IPv4', 'IPv6'

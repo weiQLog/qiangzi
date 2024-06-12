@@ -318,12 +318,12 @@ const safelyQueryPhotos = async <T>(callback: () => Promise<T>): Promise<T> => {
       `column "${field}" of relation "photos" does not exist`,
       'i',
     ).test(e.message))) {
-      console.log('Running migration 01 ...');
+      console.log('正在运行 migration 01 ...');
       await sqlRunMigration01();
       result = await callback();
     } else if (/relation "photos" does not exist/i.test(e.message)) {
       // If the table does not exist, create it
-      console.log('Creating photos table ...');
+      console.log('正在创建 photos 表 ...');
       await sqlCreatePhotosTable();
       result = await callback();
     } else if (/endpoint is in transition/i.test(e.message)) {
@@ -332,11 +332,11 @@ const safelyQueryPhotos = async <T>(callback: () => Promise<T>): Promise<T> => {
       try {
         result = await callback();
       } catch (e: any) {
-        console.log(`sql get error on retry (after 5000ms): ${e.message} `);
+        console.log(`sql重试时出错（5000 毫秒后）：${e.message} `);
         throw e;
       }
     } else {
-      console.log(`sql get error: ${e.message} `);
+      console.log(`sql出错: ${e.message} `);
       throw e;
     }
   }
