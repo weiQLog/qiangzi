@@ -6,15 +6,16 @@ import { NextApiRequest } from "next";
  * @param req NextApiRequest
  * @returns
  */
-export function getClientIp(req: IncomingMessage): string | undefined {
-  const forwarded = req.headers['x-forwarded-for'];
-  if (forwarded) {
-    return Array.isArray(forwarded) ? forwarded[0] : forwarded.split(',')[0];
+export function getClientIp(req: Request): string | undefined {
+  let ip = req.headers.get('x-forwarded-for') as string | undefined;
+  // 如果头部存在且有多个 IP 地址，选择第一个作为客户端 IP 地址
+  if (ip && ip.includes(',')) {
+    ip = ip.split(',')[0].trim();
   }
-  console.log(req.headers);
-  return (
-    req.socket?.remoteAddress ||
-    req.connection?.remoteAddress ||
-    undefined
-  );
+
+  // 处理可能的 IPv6 转换为 IPv4 的情况
+  if (ip && ip.startsWith('::ffff:')) {
+    ip = ip.replace('::ffff:', '');
+  }
+  return ip;
 }

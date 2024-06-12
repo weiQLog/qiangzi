@@ -10,7 +10,7 @@ type ResponseData = {
 }
 
 export function GET(
-  req: IncomingMessage,
+  req: Request,
   res: NextResponse<ResponseData>
 ) {
   let myIp = getClientIp(req)
