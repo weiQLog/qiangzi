@@ -1,3 +1,4 @@
+import { IncomingMessage } from "http";
 import { NextApiRequest } from "next";
 
 /**
@@ -5,7 +6,7 @@ import { NextApiRequest } from "next";
  * @param req NextApiRequest
  * @returns
  */
-export function getClientIp(req: NextApiRequest): string | undefined {
+export function getClientIp(req: IncomingMessage): string | undefined {
   const forwarded = req.headers['x-forwarded-for'];
   if (forwarded) {
     return Array.isArray(forwarded) ? forwarded[0] : forwarded.split(',')[0];

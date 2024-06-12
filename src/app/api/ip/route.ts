@@ -1,4 +1,5 @@
 import { getClientIp } from '@/utility/client'
+import { IncomingMessage } from 'http'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { NextResponse } from 'next/server'
 
@@ -9,7 +10,7 @@ type ResponseData = {
 }
 
 export function GET(
-  req: NextApiRequest,
+  req: IncomingMessage,
   res: NextResponse<ResponseData>
 ) {
   let myIp = getClientIp(req)
