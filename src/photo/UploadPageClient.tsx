@@ -42,7 +42,7 @@ export default function UploadPageClient({
   return (
     <AdminChildPage
       backPath={PATH_ADMIN_UPLOADS}
-      backLabel="Uploads"
+      backLabel="Uploads" 
       breadcrumb={pending && updatedTitle
         ? updatedTitle
         : blobId}

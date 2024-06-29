@@ -73,8 +73,7 @@ const FORM_METADATA = (
     label: 'caption',
     capitalize: true,
     validateStringMaxLength: STRING_MAX_LENGTH_LONG,
-    shouldHide: ({ title, caption }) =>
-      !aiTextGeneration && (!title && !caption),
+    shouldHide: ({ title, caption }) => !aiTextGeneration && (!title && !caption),
   },
   tags: {
     label: 'tags',
@@ -123,6 +122,24 @@ const FORM_METADATA = (
   priorityOrder: { label: 'priority order' },
   favorite: { label: 'favorite', type: 'checkbox', virtual: true },
   hidden: { label: 'hidden', type: 'checkbox' },
+  ip: {
+    label: '',
+    note: undefined,
+    required: undefined,
+    virtual: undefined,
+    readOnly: undefined,
+    validate: undefined,
+    validateStringMaxLength: undefined,
+    capitalize: undefined,
+    hide: undefined,
+    hideIfEmpty: undefined,
+    shouldHide: undefined,
+    loadingMessage: undefined,
+    type: undefined,
+    selectOptions: undefined,
+    selectOptionsDefaultLabel: undefined,
+    tagOptions: undefined
+  }
 });
 
 export const FORM_METADATA_ENTRIES = (

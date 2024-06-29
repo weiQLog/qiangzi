@@ -11,6 +11,13 @@ import { ExifData, ExifParserFactory } from 'ts-exif-parser';
 import { PhotoFormData } from './form';
 import { FilmSimulation } from '@/simulation';
 
+
+/**
+ * 从给定的 blobPath 中提取EXIF数据，并返回一个包含 blobId 和 photoFormExif 
+ * @param blobPath 
+ * @param includeInitialPhotoFields 
+ * @returns 
+ */
 export const extractExifDataFromBlobPath = async (
   blobPath: string,
   includeInitialPhotoFields?: boolean,
@@ -23,7 +30,8 @@ export const extractExifDataFromBlobPath = async (
   const blobId = getIdFromStorageUrl(url);
 
   const extension = getExtensionFromStorageUrl(url);
-
+  // console.log(`blobPath`, blobPath)
+  // console.log(`url`, url);
   const fileBytes = blobPath
     ? await fetch(url)
       .then(res => res.arrayBuffer())

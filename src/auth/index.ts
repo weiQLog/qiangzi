@@ -1,6 +1,8 @@
 import { isPathProtected } from '@/site/paths';
 import NextAuth, { User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+import GithubProvider from "next-auth/providers/github";
+
 
 export const KEY_CREDENTIALS_SIGN_IN_ERROR = 'CredentialsSignin';
 export const KEY_CREDENTIALS_SIGN_IN_ERROR_URL =
@@ -14,6 +16,7 @@ export const {
   auth,
 } = NextAuth({
   providers: [
+    // GithubProvider,
     Credentials({
       async authorize({ email, password }) {
         if (
@@ -29,21 +32,38 @@ export const {
     }),
   ],
   callbacks: {
+    // async redirect({ url, baseUrl }) {
+    //   console.log('Redirecting to:', url);
+    //   console.log('Base URL:', baseUrl);
+    //   if (url.startsWith('/')) return `${baseUrl}${url}`;
+    //   else if (new URL(url).origin === baseUrl) return url;
+    //   return baseUrl;
+    // },
     authorized({ auth, request }) {
       const { pathname } = request.nextUrl;
 
       const isUrlProtected = isPathProtected(pathname);
       const isUserLoggedIn = !!auth?.user;
+      //  用户登录，或者不是保护路径则true
       const isRequestAuthorized = !isUrlProtected || isUserLoggedIn;
 
       return isRequestAuthorized;
     },
+    // jwt({ token, trigger, session }) {
+    //   if (trigger === 'update') token.name = session.user.name
+    //   return token
+    // },
   },
   pages: {
     signIn: '/sign-in',
   },
 });
 
+/**
+ * 执行adminserver action
+ * @param callback 
+ * @returns 
+ */
 export const safelyRunAdminServerAction = async <T>(
   callback: () => T,
 ): Promise<T> => {
@@ -55,6 +75,10 @@ export const safelyRunAdminServerAction = async <T>(
   }
 };
 
+/**
+ * 生成 authSecret
+ * @returns 
+ */
 export const generateAuthSecret = () => fetch(
   'https://generate-secret.vercel.app/32',
   { cache: 'no-cache' },

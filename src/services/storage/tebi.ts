@@ -29,8 +29,10 @@ const urlForKey = (key?: string) => `${TEBI_BASE_URL}/qiangzi/${key}`;
 export const isUrlFromTEBI = (url?: string) =>
   TEBI_BASE_URL && url?.startsWith(TEBI_BASE_URL);
 
-export const tebiPutObjectCommandForKey = (Key: string) =>
-  new PutObjectCommand({ Bucket: TEBI_BUCKET, Key });
+export const tebiPutObjectCommandForKey = (Key: string) => {
+  console.log("uplaod key ", Key)
+  return new PutObjectCommand({ Bucket: TEBI_BUCKET, Key })
+}
 
 export const tebiCopy = async (
   fileNameSource: string,
@@ -63,6 +65,7 @@ export const tebiList = async (
     })) ?? []);
 
 export const tebiDelete = async (Key: string) => {
+  console.log('Key', Key);
   tebiClient().send(new DeleteObjectCommand({
     Bucket: TEBI_BUCKET,
     Key,

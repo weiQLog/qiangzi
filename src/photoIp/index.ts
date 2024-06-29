@@ -1,6 +1,5 @@
 import { db, sql } from '@vercel/postgres';
-export interface PhotoIpDbInsert {
-    photo_id: string;
+export interface IpInfoDB {
     ip: string;
     network: string; // CIDR notation
     version: string; // IP version, e.g., 'IPv4', 'IPv6'
@@ -29,3 +28,15 @@ export interface PhotoIpDbInsert {
     asn?: string;
     org?: string;
 }
+
+export interface IpInfoVO {
+    city?: string;
+    region?: string;
+    country?: string; // ISO 3166-1 alpha-2
+    countryName?: string;
+    continentCode?: string; // Continent code
+}
+
+export interface PhotoIpDbInsert extends IpInfoDB{
+}
+

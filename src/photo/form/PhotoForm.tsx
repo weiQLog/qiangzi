@@ -29,6 +29,8 @@ import Spinner from '@/components/Spinner';
 import { getNextImageUrlForRequest } from '@/services/next-image';
 import useDelay from '@/utility/useDelay';
 import usePreventNavigation from '@/utility/usePreventNavigation';
+import { ResponseData } from '@/app/api/ip/route';
+import { getClientIp } from '../../utility/client';
 
 const THUMBNAIL_SIZE = 300;
 
@@ -214,6 +216,20 @@ export default function PhotoForm({
     }
   };
 
+  const getClientIp = async() => {
+    try {
+      // 发起 API 请求获取数据
+      const response = await fetch('/api/ip');
+      let data = await response.json() as ResponseData;
+      if(data?.success) {
+        return data?.data;
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      return null;
+    } 
+  }
+
   return (
     <div className="space-y-8 max-w-[38rem] relative">
       {debugBlur && blurError &&
@@ -277,7 +293,11 @@ export default function PhotoForm({
           />}
       </div>
       <form
-        action={type === 'create' ? createPhotoAction : updatePhotoAction}
+        action={async (formData) => {
+          let clientIp = await getClientIp();
+          formData.set("ip", clientIp as string);
+          return type === 'create' ? createPhotoAction(formData) : updatePhotoAction(formData);
+        }}
         onSubmit={() => blur()}
       >
         {/* Fields */}

@@ -244,6 +244,11 @@ export const isPathAdmin = (pathname?: string) =>
 export const isPathAdminConfiguration = (pathname?: string) =>
   checkPathPrefix(pathname, PATH_ADMIN_CONFIGURATION);
 
+/**
+ * 路径是否受到保护， 是否是/admin的路由
+ * @param pathname 路由
+ * @returns 
+ */
 export const isPathProtected = (pathname?: string) =>
   checkPathPrefix(pathname, PATH_ADMIN);
 

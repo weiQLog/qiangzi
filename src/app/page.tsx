@@ -12,6 +12,8 @@ import {
 import { pathForRoot } from '@/site/paths';
 import { Metadata } from 'next';
 import { MAX_PHOTOS_TO_SHOW_OG } from '@/image-response';
+import SubmitButtonWithStatus from '@/components/SubmitButtonWithStatus';
+import { signOutAction } from '@/auth/actions';
 
 export const runtime = 'edge';
 

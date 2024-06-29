@@ -59,6 +59,7 @@ export default function SignInForm() {
           <SubmitButtonWithStatus disabled={!isFormValid}>
             Sign in
           </SubmitButtonWithStatus>
+          {/* <button type="submit">点击登录 GitHub</button> */}
         </div>
       </form>
     </InfoBlock>

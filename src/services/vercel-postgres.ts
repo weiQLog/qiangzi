@@ -6,6 +6,7 @@ import {
   parsePhotoFromDb,
   Photo,
   PhotoDateRange,
+
 } from '@/photo';
 import { Camera, Cameras, createCameraKey } from '@/camera';
 import { parameterize } from '@/utility/string';
@@ -24,6 +25,10 @@ export const convertArrayToPostgresString = (array?: string[]) => array
   ? `{${array.join(',')}}`
   : null;
 
+/**
+ * 创建 photos 表，如果表不存在
+ * @returns 创建表的 SQL 查询
+ */
 const sqlCreatePhotosTable = () =>
   sql`
     CREATE TABLE IF NOT EXISTS photos (
@@ -53,12 +58,17 @@ const sqlCreatePhotosTable = () =>
       taken_at_naive VARCHAR(255) NOT NULL,
       hidden BOOLEAN,
       updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+      ip character varying COLLATE pg_catalog."default"
     )
   `;
 
 // Migration 01
 const MIGRATION_FIELDS_01 = ['caption', 'semantic_description'];
+/**
+ * 运行第一个迁移，添加 caption 和 semantic_description 列
+ * @returns 运行迁移的 SQL 查询
+ */
 const sqlRunMigration01 = () =>
   sql`
     ALTER TABLE photos
@@ -94,7 +104,8 @@ export const sqlInsertPhoto = (photo: PhotoDbInsert) =>
       priority_order,
       hidden,
       taken_at,
-      taken_at_naive
+      taken_at_naive,
+      ip
     )
     VALUES (
       ${photo.id},
@@ -121,10 +132,15 @@ export const sqlInsertPhoto = (photo: PhotoDbInsert) =>
       ${photo.priorityOrder},
       ${photo.hidden},
       ${photo.takenAt},
-      ${photo.takenAtNaive}
+      ${photo.takenAtNaive},
+      ${photo.ip}
     )
   `);
-
+/**
+ * 更新照片的数据
+ * @param photo - 需要更新的照片数据
+ * @returns 更新数据的 SQL 查询
+ */
 export const sqlUpdatePhoto = (photo: PhotoDbInsert) =>
   safelyQueryPhotos(() => sql`
     UPDATE photos SET
@@ -156,6 +172,11 @@ export const sqlUpdatePhoto = (photo: PhotoDbInsert) =>
     WHERE id=${photo.id}
   `);
 
+/**
+ * 删除全局照片标签
+ * @param tag - 需要删除的标签
+ * @returns 删除标签的 SQL 查询
+ */
 export const sqlDeletePhotoTagGlobally = (tag: string) =>
   safelyQueryPhotos(() => sql`
     UPDATE photos
@@ -163,6 +184,12 @@ export const sqlDeletePhotoTagGlobally = (tag: string) =>
     WHERE ${tag}=ANY(tags)
   `);
 
+/**
+ * 全局重命名照片标签
+ * @param tag - 旧标签
+ * @param updatedTag - 新标签
+ * @returns 重命名标签的 SQL 查询
+ */
 export const sqlRenamePhotoTagGlobally = (tag: string, updatedTag: string) =>
   safelyQueryPhotos(() => sql`
     UPDATE photos
@@ -170,29 +197,67 @@ export const sqlRenamePhotoTagGlobally = (tag: string, updatedTag: string) =>
     WHERE ${tag}=ANY(tags)
   `);
 
+/**
+ * 删除照片
+ * @param id - 需要删除的照片 ID
+ * @returns 删除照片的 SQL 查询
+ */
 export const sqlDeletePhoto = (id: string) =>
   safelyQueryPhotos(() => sql`DELETE FROM photos WHERE id=${id}`);
 
+/**
+ * 获取单张照片
+ * @param id - 照片 ID
+ * @returns 获取照片的 SQL 查询
+ */
 const sqlGetPhoto = (id: string) =>
   safelyQueryPhotos(() =>
-    sql<PhotoDb>`SELECT * FROM photos WHERE id=${id} LIMIT 1`
+    sql<Photo>`
+      SELECT photos_ip.city,
+            photos_ip.region,
+            photos_ip.country,
+            photos_ip.country_name,
+            photos_ip.continent_code,
+            photos.*
+      FROM photos
+              LEFT JOIN photos_ip ON photos_ip.ip = photos.ip
+      WHERE id = ${id}
+      LIMIT 1`
   );
 
+/**
+ * 获取照片总数（不包括隐藏的照片）
+ * @returns 获取照片总数的 SQL 查询
+ */
 const sqlGetPhotosCount = async () => sql`
   SELECT COUNT(*) FROM photos
   WHERE hidden IS NOT TRUE
 `.then(({ rows }) => parseInt(rows[0].count, 10));
 
+/**
+ * 获取照片总数（包括隐藏的照片）
+ * @returns 获取照片总数的 SQL 查询
+ */
 const sqlGetPhotosCountIncludingHidden = async () => sql`
   SELECT COUNT(*) FROM photos
 `.then(({ rows }) => parseInt(rows[0].count, 10));
 
+/**
+ * 获取包含特定标签的照片总数
+ * @param tag - 标签
+ * @returns 获取包含特定标签的照片总数的 SQL 查询
+ */
 const sqlGetPhotosTagCount = async (tag: string) => sql`
   SELECT COUNT(*) FROM photos
   WHERE ${tag}=ANY(tags) AND
   hidden IS NOT TRUE
 `.then(({ rows }) => parseInt(rows[0].count, 10));
 
+/**
+ * 获取特定相机拍摄的照片总数
+ * @param camera - 相机信息
+ * @returns 获取特定相机拍摄的照片总数的 SQL 查询
+ */
 const sqlGetPhotosCameraCount = async (camera: Camera) => sql`
   SELECT COUNT(*) FROM photos
   WHERE
@@ -201,6 +266,11 @@ const sqlGetPhotosCameraCount = async (camera: Camera) => sql`
   hidden IS NOT TRUE
 `.then(({ rows }) => parseInt(rows[0].count, 10));
 
+/**
+ * 获取特定胶片模拟的照片总数
+ * @param simulation - 胶片模拟
+ * @returns 获取特定胶片模拟的照片总数的 SQL 查询
+ */
 const sqlGetPhotosFilmSimulationCount = async (
   simulation: FilmSimulation,
 ) => sql`
@@ -209,6 +279,10 @@ const sqlGetPhotosFilmSimulationCount = async (
   hidden IS NOT TRUE
 `.then(({ rows }) => parseInt(rows[0].count, 10));
 
+/**
+ * 获取照片的日期范围（不包括隐藏的照片）
+ * @returns 获取照片日期范围的 SQL 查询
+ */
 const sqlGetPhotosDateRange = async () => sql`
   SELECT MIN(taken_at_naive) as start, MAX(taken_at_naive) as end
   FROM photos
@@ -217,6 +291,11 @@ const sqlGetPhotosDateRange = async () => sql`
     ? rows[0] as PhotoDateRange
     : undefined);
 
+/**
+ * 获取包含特定标签的照片的日期范围
+ * @param tag - 标签
+ * @returns 获取包含特定标签的照片日期范围的 SQL 查询
+ */
 const sqlGetPhotosTagDateRange = async (tag: string) => sql`
   SELECT MIN(taken_at_naive) as start, MAX(taken_at_naive) as end
   FROM photos
@@ -226,6 +305,11 @@ const sqlGetPhotosTagDateRange = async (tag: string) => sql`
     ? rows[0] as PhotoDateRange
     : undefined);
 
+/**
+ * 获取特定相机拍摄的照片的日期范围
+ * @param camera - 相机信息
+ * @returns
+ */
 const sqlGetPhotosCameraDateRange = async (camera: Camera) => sql`
   SELECT MIN(taken_at_naive) as start, MAX(taken_at_naive) as end
   FROM photos
@@ -358,7 +442,16 @@ export const getPhotos = async (options: GetPhotosOptions = {}) => {
     includeHidden,
   } = options;
 
-  let sql = ['SELECT * FROM photos'];
+  let sql = [`
+    SELECT photos_ip.city,
+            photos_ip.region,
+            photos_ip.country,
+            photos_ip.country_name,
+            photos_ip.continent_code,
+            photos.*
+      FROM photos
+              LEFT JOIN photos_ip ON photos_ip.ip = photos.ip
+    `];
   let values = [] as (string | number)[];
   let valueIndex = 1;
 
@@ -434,13 +527,18 @@ export const getPhotosNearId = async (
     const client = await db.connect();
     return client.query(
       `
-        WITH twi AS (
-          SELECT *, row_number()
-          OVER (${orderBy}) as row_number
-          FROM photos
-          WHERE hidden IS NOT TRUE
-        ),
-        current AS (SELECT row_number FROM twi WHERE id = $1)
+      WITH twi AS (SELECT photos.*,
+                          photos_ip.city,
+                          photos_ip.region,
+                          photos_ip.country,
+                          photos_ip.country_name,
+                          photos_ip.continent_code,
+                          row_number()
+                          OVER (ORDER BY taken_at DESC) as row_number
+                  FROM photos
+                            LEFT JOIN photos_ip ON photos_ip.ip = photos.ip
+                  WHERE hidden IS NOT TRUE),
+          current AS (SELECT row_number FROM twi WHERE id = $1)
         SELECT twi.*
         FROM twi, current
         WHERE twi.row_number >= current.row_number - 1

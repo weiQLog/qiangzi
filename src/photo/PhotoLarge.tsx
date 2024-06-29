@@ -19,6 +19,7 @@ import { sortTags } from '@/tag';
 import AdminPhotoMenu from '@/admin/AdminPhotoMenu';
 import { Suspense } from 'react';
 import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';
+import LocationTag from '@/components/info/Location';
 
 export default function PhotoLarge({
   photo,
@@ -105,6 +106,7 @@ export default function PhotoLarge({
                 </div>}
             </div>
           </div>
+          
           {/* EXIF Data */}
           <div className="space-y-baseline">
             {showExifContent &&
@@ -154,6 +156,7 @@ export default function PhotoLarge({
               />
             </div>
           </div>
+          {photo.city ? <LocationTag locationName={photo.countryName + ',' + photo.city}/> : ''}
         </DivDebugBaselineGrid>}
     />
   );

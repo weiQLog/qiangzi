@@ -1,4 +1,6 @@
-import { PhotoIpDbInsert } from '@/photoIp'
+import { PhotoDbInsert } from '@/photo'
+import { IpInfoDB, PhotoIpDbInsert } from '@/photoIp'
+import { ipInfo } from '@/utility/client'
 import { db, sql } from '@vercel/postgres'
 import { NextApiRequest, NextApiResponse } from 'next/types'
 
@@ -9,8 +11,7 @@ import { NextApiRequest, NextApiResponse } from 'next/types'
 const sqlCreatePhotosIpTable = () =>
   sql`
       CREATE TABLE IF NOT EXISTS photos_ip (
-        photo_id PRIMARY KEY,
-        ip VARCHAR(45) NOT NULL,
+        ip VARCHAR(45) NOT NULL PRIMARY KEY,
         network CIDR NOT NULL,
         version VARCHAR(10) NOT NULL,
         city VARCHAR(100),
@@ -43,7 +44,6 @@ export const insert = (photo: PhotoIpDbInsert) =>
   safelyQueryPhotosIp(
     () => sql`
       INSERT INTO photos_ip (
-        photo_id,
         ip, 
         network, 
         version, 
@@ -72,7 +72,6 @@ export const insert = (photo: PhotoIpDbInsert) =>
         asn, 
         org
       ) VALUES (
-        ${photo.photo_id},
         ${photo.ip},
         ${photo.network},
         ${photo.version},
@@ -99,16 +98,33 @@ export const insert = (photo: PhotoIpDbInsert) =>
         ${photo.countryArea},
         ${photo.countryPopulation},
         ${photo.asn},
-        ${photo.org},
+        ${photo.org}
         )
         `
   )
 
-export const sqlInsertPhotosIp = (
-  photos_id: string,
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {}
+/**
+ * 查找ip
+ * @param ip ip
+ * @returns 
+ */
+export const getIp = (ip: string) => {
+  return safelyQueryPhotosIp(
+    () => sql<PhotoIpDbInsert>`SELECT * FROM photos_ip WHERE ip=${ip} LIMIT 1`
+  )
+}
+
+export const sqlInsertPhotosIp = async (
+  photo: PhotoDbInsert,
+  photoIp: string
+) => {
+  let ip = (await ipInfo(photoIp)) as IpInfoDB
+  let photoIpDb: PhotoIpDbInsert = {
+    ...ip,
+  }
+  console.log(`photoIpDb:`, photoIpDb);
+  return insert(photoIpDb)
+}
 
 /**
  * 处理可能出现的各种错误情况

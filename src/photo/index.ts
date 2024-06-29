@@ -1,3 +1,4 @@
+import { IpInfoDB, IpInfoVO } from '@/photoIp';
 import { FilmSimulation } from '@/simulation';
 import { SHOW_EXIF_DATA } from '@/site/config';
 import { ABSOLUTE_PATH_FOR_HOME_IMAGE } from '@/site/paths';
@@ -54,7 +55,8 @@ export interface PhotoDbInsert extends PhotoExif {
   priorityOrder?: number
   hidden?: boolean
   takenAt: string
-  takenAtNaive: string
+  takenAtNaive: string,
+  ip: string
 }
 
 // Raw db response
@@ -65,8 +67,13 @@ export interface PhotoDb extends Omit<PhotoDbInsert, 'takenAt' | 'tags'> {
   tags: string[]
 }
 
+
+
+/**
+ * photodb带ip
+ */
 // Parsed db response
-export interface Photo extends PhotoDb {
+export interface Photo extends PhotoDb, IpInfoVO {
   focalLengthFormatted?: string
   focalLengthIn35MmFormatFormatted?: string
   fNumberFormatted?: string
@@ -180,7 +187,7 @@ export const photoQuantityText = (count: number, includeParentheses = true) =>
     : `${count} ${photoLabelForCount(count)}`;  
 
 export const deleteConfirmationTextForPhoto = (photo: Photo) =>
-  `Are you sure you want to delete "${titleForPhoto(photo)}?"`;
+  `你想删除相片 "${titleForPhoto(photo)}?"`;
 
 export type PhotoDateRange = { start: string, end: string };
 

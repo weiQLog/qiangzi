@@ -94,6 +94,9 @@ export const revalidateAllKeys = () => {
   revalidateFilmSimulationsKey();
 };
 
+/**
+ * 重新验证缓存
+ */
 export const revalidateAllKeysAndPaths = () => {
   revalidateAllKeys();
   revalidatePath('/', 'layout');

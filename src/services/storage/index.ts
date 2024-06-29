@@ -137,12 +137,19 @@ export const uploadFromClientViaPresignedUrl = async (
 
   const url = await fetch(`${PATH_API_PRESIGNED_URL}/${key}`)
     .then((response) => response.text());
-  return fetch(url, { method: 'PUT', body: file })
-    .then(() => {
+  return await fetch(url, { method: 'PUT', body: file })
+    .then((res) => {
+      console.log("putObject res:", res);
+      if(res.status !== 200) {
+        return '';
+      }
       if(CURRENT_STORAGE === 'tebi' && TEBI_BUCKET) {
         return `${baseUrlForStorage(CURRENT_STORAGE)}/${TEBI_BUCKET}/${key}`;
       }
       return `${baseUrlForStorage(CURRENT_STORAGE)}/${key}`;
+    }).catch(err => {
+      console.log("出错,", err);
+      return '';
     });
 };
 

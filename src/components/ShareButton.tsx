@@ -1,6 +1,11 @@
 import { TbPhotoShare } from 'react-icons/tb';
 import IconPathButton from '@/components/IconPathButton';
 
+/**
+ * 分享按钮
+ * @param param0 
+ * @returns 
+ */
 export default function ShareButton({
   path,
   prefetch,
