@@ -11,6 +11,7 @@ export type ResponseData = {
 
 export async function GET(req: Request, res: NextResponse<ResponseData>) {
   let myIp = getClientIp(req)
+  console.log('myIp', myIp);
   // let myIp = `103.156.243.57`
   // let ipRes = await ipInfo(myIp)
   return NextResponse.json({
