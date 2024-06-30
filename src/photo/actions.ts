@@ -62,12 +62,12 @@ export async function createPhotoAction(formData: FormData) {
       if(ipInfo.rowCount === 0)
         await sqlInsertPhotosIp(photo, formData.get('ip') as string)
       await sql`COMMIT`;
-      revalidateAllKeysAndPaths()
-      console.log(`重定向 ${PATH_ADMIN_PHOTOS}`);
     } catch (err) {
       await sql`ROLLBACK`;
     } finally {
       // redirect 不能在try catch中调用！
+      revalidateAllKeysAndPaths()
+      console.log(`重定向 ${PATH_ADMIN_PHOTOS}`);
       redirect(PATH_ADMIN_PHOTOS)
     }
   })

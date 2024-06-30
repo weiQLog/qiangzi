@@ -214,10 +214,9 @@ const sqlGetPhoto = (id: string) =>
   safelyQueryPhotos(() =>
     sql<Photo>`
       SELECT photos_ip.city,
-            photos_ip.region,
-            photos_ip.country,
             photos_ip.country_name,
-            photos_ip.continent_code,
+            photos_ip.country_code2,
+            photos_ip.country_flag,
             photos.*
       FROM photos
               LEFT JOIN photos_ip ON photos_ip.ip = photos.ip
@@ -444,10 +443,9 @@ export const getPhotos = async (options: GetPhotosOptions = {}) => {
 
   let sql = [`
     SELECT photos_ip.city,
-            photos_ip.region,
-            photos_ip.country,
             photos_ip.country_name,
-            photos_ip.continent_code,
+            photos_ip.country_code2,
+            photos_ip.country_flag,
             photos.*
       FROM photos
               LEFT JOIN photos_ip ON photos_ip.ip = photos.ip
@@ -529,10 +527,9 @@ export const getPhotosNearId = async (
       `
       WITH twi AS (SELECT photos.*,
                           photos_ip.city,
-                          photos_ip.region,
-                          photos_ip.country,
                           photos_ip.country_name,
-                          photos_ip.continent_code,
+                          photos_ip.country_code2,
+                          photos_ip.country_flag,
                           row_number()
                           OVER (ORDER BY taken_at DESC) as row_number
                   FROM photos

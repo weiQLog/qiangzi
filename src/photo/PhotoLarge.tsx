@@ -156,7 +156,7 @@ export default function PhotoLarge({
               />
             </div>
           </div>
-          {photo.city ? <LocationTag locationName={photo.countryName + ',' + photo.city}/> : ''}
+          {photo.city ? <LocationTag imgSrc={photo.countryFlag} locationName={ photo.countryName === photo.city ? photo.city : photo.countryName + ',' + photo.city}/> : ''}
         </DivDebugBaselineGrid>}
     />
   );

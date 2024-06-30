@@ -10,97 +10,129 @@ import { NextApiRequest, NextApiResponse } from 'next/types'
  */
 const sqlCreatePhotosIpTable = () =>
   sql`
-      CREATE TABLE IF NOT EXISTS photos_ip (
-        ip VARCHAR(45) NOT NULL PRIMARY KEY,
-        network CIDR NOT NULL,
-        version VARCHAR(10) NOT NULL,
-        city VARCHAR(100),
-        region VARCHAR(100),
-        region_code VARCHAR(10),
-        country VARCHAR(2),
-        country_name VARCHAR(100),
-        country_code VARCHAR(2),
-        country_code_iso3 VARCHAR(3),
-        country_capital VARCHAR(100),
-        country_tld VARCHAR(10),
-        continent_code VARCHAR(2),
-        in_eu BOOLEAN,
-        postal VARCHAR(20),
-        latitude DOUBLE PRECISION,
-        longitude DOUBLE PRECISION,
-        timezone VARCHAR(50),
-        utc_offset VARCHAR(10),
-        country_calling_code VARCHAR(10),
-        currency VARCHAR(10),
-        currency_name VARCHAR(50),
-        languages VARCHAR(255),
-        country_area DOUBLE PRECISION,
-        country_population BIGINT,
-        asn VARCHAR(20),
-        org VARCHAR(255)
-    )`
+    CREATE TABLE IF NOT EXISTS photos_ip (
+      ip VARCHAR(15) PRIMARY KEY, -- IP地址，主键
+      continent_code VARCHAR(2), -- 大陆代码
+      continent_name VARCHAR(50), -- 大陆名称
+      country_code2 VARCHAR(2), -- 国家代码（2位）
+      country_code3 VARCHAR(3), -- 国家代码（3位）
+      country_name VARCHAR(100), -- 国家名称
+      country_name_official VARCHAR(100), -- 国家官方名称
+      country_capital VARCHAR(50), -- 国家首都
+      state_prov VARCHAR(50), -- 省或州
+      state_code VARCHAR(50), -- 省或州代码
+      district VARCHAR(50), -- 区
+      city VARCHAR(50), -- 城市
+      zipcode VARCHAR(10), -- 邮政编码
+      latitude DECIMAL(9,6), -- 纬度
+      longitude DECIMAL(9,6), -- 经度
+      is_eu BOOLEAN, -- 是否属于欧盟
+      calling_code VARCHAR(10), -- 国际电话区号
+      country_tld VARCHAR(5), -- 国家顶级域名
+      languages VARCHAR(100), -- 使用语言
+      country_flag VARCHAR(100), -- 国家国旗URL
+      geoname_id BIGINT, -- GeoName ID
+      isp VARCHAR(100), -- 互联网服务提供商
+      connection_type VARCHAR(50), -- 连接类型
+      organization VARCHAR(100), -- 组织名称
+      country_emoji VARCHAR(10), -- 国家表情符号
+      currency_code VARCHAR(3), -- 货币代码
+      currency_name VARCHAR(50), -- 货币名称
+      currency_symbol VARCHAR(3), -- 货币符号
+      time_zone_name VARCHAR(50), -- 时区名称
+      time_zone_offset INTEGER, -- 时区偏移量
+      time_zone_offset_with_dst INTEGER, -- 含夏令时的时区偏移量
+      time_zone_current_time TIMESTAMPTZ, -- 当前时间
+      time_zone_current_time_unix DOUBLE PRECISION, -- 当前时间的Unix时间戳
+      time_zone_is_dst BOOLEAN, -- 是否为夏令时
+      time_zone_dst_savings INTEGER, -- 夏令时的节约时间
+      time_zone_dst_exists BOOLEAN, -- 是否存在夏令时
+      time_zone_dst_start VARCHAR(50), -- 夏令时开始时间
+      time_zone_dst_end VARCHAR(50) -- 夏令时结束时间)    
+    `
 
 export const insert = (photo: PhotoIpDbInsert) =>
   safelyQueryPhotosIp(
     () => sql`
       INSERT INTO photos_ip (
-        ip, 
-        network, 
-        version, 
-        city, 
-        region, 
-        region_code, 
-        country, 
-        country_name, 
-        country_code, 
-        country_code_iso3, 
-        country_capital, 
-        country_tld, 
-        continent_code, 
-        in_eu, 
-        postal, 
-        latitude, 
-        longitude, 
-        timezone, 
-        utc_offset, 
-        country_calling_code, 
-        currency, 
-        currency_name, 
-        languages, 
-        country_area, 
-        country_population, 
-        asn, 
-        org
-      ) VALUES (
+        ip,
+        continent_code,
+        continent_name,
+        country_code2,
+        country_code3,
+        country_name,
+        country_name_official,
+        country_capital,
+        state_prov,
+        state_code,
+        district,
+        city,
+        zipcode,
+        latitude,
+        longitude,
+        is_eu,
+        calling_code,
+        country_tld,
+        languages,
+        country_flag,
+        geoname_id,
+        isp,
+        connection_type,
+        organization,
+        country_emoji,
+        currency_code,
+        currency_name,
+        currency_symbol,
+        time_zone_name,
+        time_zone_offset,
+        time_zone_offset_with_dst,
+        time_zone_current_time,
+        time_zone_current_time_unix,
+        time_zone_is_dst,
+        time_zone_dst_savings,
+        time_zone_dst_exists,
+        time_zone_dst_start,
+        time_zone_dst_end
+    ) VALUES (
         ${photo.ip},
-        ${photo.network},
-        ${photo.version},
-        ${photo.city},
-        ${photo.region},
-        ${photo.regionCode},
-        ${photo.country},
-        ${photo.countryName},
-        ${photo.countryCode},
-        ${photo.countryCodeIso3},
-        ${photo.countryCapital},
-        ${photo.countryTld},
         ${photo.continentCode},
-        ${photo.inEu},
-        ${photo.postal},
+        ${photo.continentName},
+        ${photo.countryCode2},
+        ${photo.countryCode3},
+        ${photo.countryName},
+        ${photo.countryNameOfficial},
+        ${photo.countryCapital},
+        ${photo.stateProv},
+        ${photo.stateCode},
+        ${photo.district},
+        ${photo.city},
+        ${photo.zipcode},
         ${photo.latitude},
         ${photo.longitude},
-        ${photo.timezone},
-        ${photo.utcOffset},
-        ${photo.countryCallingCode},
-        ${photo.currency},
-        ${photo.currencyName},
+        ${photo.isEu},
+        ${photo.callingCode},
+        ${photo.countryTld},
         ${photo.languages},
-        ${photo.countryArea},
-        ${photo.countryPopulation},
-        ${photo.asn},
-        ${photo.org}
-        )
-        `
+        ${photo.countryFlag},
+        ${photo.geonameId},
+        ${photo.isp},
+        ${photo.connectionType},
+        ${photo.organization},
+        ${photo.countryEmoji},
+        ${photo.currencyCode},
+        ${photo.currencyName},
+        ${photo.currencySymbol},
+        ${photo.timeZoneName},
+        ${photo.timeZoneOffset},
+        ${photo.timeZoneOffsetWithDst},
+        ${photo.timeZoneCurrentTime},
+        ${photo.timeZoneCurrentTimeUnix},
+        ${photo.timeZoneIsDst},
+        ${photo.timeZoneDstSavings},
+        ${photo.timeZoneDstExists},
+        ${photo.timeZoneDstStart},
+        ${photo.timeZoneDstEnd}
+    )`
   )
 
 /**
@@ -119,11 +151,14 @@ export const sqlInsertPhotosIp = async (
   photoIp: string
 ) => {
   let ip = (await ipInfo(photoIp)) as IpInfoDB
-  let photoIpDb: PhotoIpDbInsert = {
-    ...ip,
+  if(ip) {
+    let photoIpDb: PhotoIpDbInsert = {
+      ...ip,
+    }
+    console.log(`photoIpDb:`, photoIpDb);
+    return insert(photoIpDb)
   }
-  console.log(`photoIpDb:`, photoIpDb);
-  return insert(photoIpDb)
+  return ip;
 }
 
 /**
