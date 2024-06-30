@@ -38,7 +38,7 @@ export async function requestClientIp(): Promise<string | undefined> {
 export async function ipInfo(ip: string): Promise<IpInfoDB | null> {
   // const ip = getClientIp(req);
   try {
-    const response = await fetch(`https://api.ipgeolocation.io/ipgeo?apiKey=2af7eb20cf184ffca0b46a77d324e521&ip=${ip}`)
+    const response = await fetch(`https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.IPGEOLOCATION_KEY}&ip=${ip}`)
     const data = await response.json()
     return convertKeysToCamelCase(data) as IpInfoDB
   } catch (error) {
