@@ -47,8 +47,8 @@ const sqlCreatePhotosIpTable = () =>
       time_zone_is_dst BOOLEAN, -- 是否为夏令时
       time_zone_dst_savings INTEGER, -- 夏令时的节约时间
       time_zone_dst_exists BOOLEAN, -- 是否存在夏令时
-      time_zone_dst_start VARCHAR(50), -- 夏令时开始时间
-      time_zone_dst_end VARCHAR(50) -- 夏令时结束时间)    
+      time_zone_dst_start VARCHAR(100), -- 夏令时开始时间
+      time_zone_dst_end VARCHAR(100) -- 夏令时结束时间)    
     `
 
 export const insert = (photo: PhotoIpDbInsert) =>
