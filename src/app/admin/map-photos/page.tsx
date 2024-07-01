@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { getAllMapPhotos } from "@/services/photoIp";
 
-export default function mapPhotos(){
+export default function MapPhotos(){
   const [locations, setLocations] = useState<Poi[]>([])
 
   useEffect(()  => {
