@@ -1,5 +1,3 @@
-import { GiPositionMarker } from "react-icons/gi";
-
 export default function LocationTag({
   locationName,
   imgSrc

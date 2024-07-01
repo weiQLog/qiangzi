@@ -1,5 +1,6 @@
+'use server';
 import { PhotoDbInsert } from '@/photo'
-import { IpInfoDB, PhotoIpDbInsert } from '@/photoIp'
+import { IpInfoDB, MapPhotosIp, PhotoIpDbInsert } from '@/photoIp'
 import { ipInfo } from '@/utility/client'
 import { db, sql } from '@vercel/postgres'
 import { NextApiRequest, NextApiResponse } from 'next/types'
@@ -194,4 +195,42 @@ const safelyQueryPhotosIp = async <T>(
   }
 
   return result
+}
+
+
+/**
+ * 查找ip
+ * @returns 
+ */
+export const getAllMapPhotos = () => {
+  return safelyQueryPhotosIp(
+    async () => {
+      const sql = `
+        WITH earliest_photos AS (
+          SELECT
+            pi.ip,
+            MIN(p.created_at) AS earliest_created_at,
+            pi.latitude,
+            pi.longitude
+          FROM
+            photos_ip pi
+            INNER JOIN photos p ON pi.ip = p.ip
+          GROUP BY
+            pi.ip
+        )
+        SELECT
+          e.ip,
+          e.latitude,
+          e.longitude,
+          p.url as photo_url
+        FROM
+          earliest_photos e
+          INNER JOIN photos_ip pi ON e.ip = pi.ip
+          INNER JOIN photos p ON pi.ip = p.ip AND p.created_at = e.earliest_created_at;
+    `
+      await db.connect();
+      const result = await db.query<MapPhotosIp>(sql)
+      return result.rows;
+    }
+  )
 }

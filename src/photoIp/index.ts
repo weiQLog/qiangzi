@@ -46,6 +46,13 @@ export interface IpInfoVO {
     countryFlag?: string; // 国旗url
 }
 
+export interface MapPhotosIp {
+    ip: string; // IP地址
+    latitude: number; // 纬度
+    longitude: number; // 经度
+    photo_url: string; // 图片地址
+}
+
 export interface PhotoIpDbInsert extends IpInfoDB{
 }
 

@@ -5,6 +5,7 @@ import {
 } from '@/photo/cache';
 import { getStorageUploadUrlsNoStore } from '@/services/storage/cache';
 import {
+  PATH_ADMIN_MAP_PHOTOS,
   PATH_ADMIN_PHOTOS,
   PATH_ADMIN_TAGS,
   PATH_ADMIN_UPLOADS,

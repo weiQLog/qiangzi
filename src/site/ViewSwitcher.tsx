@@ -2,8 +2,9 @@ import Switcher from '@/components/Switcher';
 import SwitcherItem from '@/components/SwitcherItem';
 import IconFullFrame from '@/site/IconFullFrame';
 import IconGrid from '@/site/IconGrid';
-import { PATH_ADMIN_PHOTOS, PATH_GRID } from '@/site/paths';
+import { PATH_ADMIN_MAP_PHOTOS, PATH_ADMIN_PHOTOS, PATH_GRID } from '@/site/paths';
 import { BiLockAlt } from 'react-icons/bi';
+import { SiGooglemaps } from "react-icons/si";
 import { useAppState } from '@/state';
 import IconSearch from './IconSearch';
 
@@ -37,6 +38,12 @@ export default function ViewSwitcher({
           <SwitcherItem
             icon={<BiLockAlt size={16} className="translate-y-[-0.5px]" />}
             href={PATH_ADMIN_PHOTOS}
+            active={currentSelection === 'admin'}
+          />}
+        {/* 显示地图 */}
+        {<SwitcherItem
+            icon={<SiGooglemaps size={16} className="translate-y-[-0.5px]" />}
+            href={PATH_ADMIN_MAP_PHOTOS}
             active={currentSelection === 'admin'}
           />}
       </Switcher>

@@ -1,0 +1,15 @@
+.widget_basic {
+  /* height: 200px; */
+  box-sizing: border-box;
+  padding: 0px;
+  background-color: #fff;
+}
+.widget_basic>.chidren {
+  width:  100%;
+  height: 100%;
+  border-radius: 5px;
+  padding: 5px;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}

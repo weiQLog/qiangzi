@@ -1,0 +1,54 @@
+.wrapper:after {
+  content: "";
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-top-color: #fff;
+  position: absolute;
+  bottom: 0;
+  right: 34%;
+  margin-bottom: -18px;
+}
+.wrapper {
+  width: 60px;
+  height: 60px;
+  position: relative;
+  margin: 20px auto;
+  border-radius: 5px;
+  box-shadow: rgba(100, 100, 111, 0.3) 0px 7px 29px 0px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.wrapper>.img {
+  border-radius: 5px;
+  height: 57px;
+  width: 57px;
+  overflow: hidden;
+}
+.img>img {
+  border-radius: 5px;
+  height: 57px;
+}
+
+@media (max-width: 768px) {
+  /* 在此处添加针对小于768px宽度设备的样式 */
+  .wrapper {
+    width: 18vw;
+    height: 18vw;
+    box-sizing: border-box;
+  }
+
+  .wrapper>.img {
+    border-radius: 5px;
+    height: 17vw;
+    width: 17vw;
+    overflow: hidden;
+  }
+  .img>img {
+    border-radius: 5px;
+    height: 17vw;
+  }
+}

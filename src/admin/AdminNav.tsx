@@ -3,12 +3,14 @@
 import SiteGrid from '@/components/SiteGrid';
 import {
   PATH_ADMIN_CONFIGURATION,
+  PATH_ADMIN_MAP_PHOTOS,
   checkPathPrefix,
   isPathAdminConfiguration,
 } from '@/site/paths';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { BiCog } from 'react-icons/bi';
 
 export default function AdminNav({
@@ -21,9 +23,12 @@ export default function AdminNav({
   }[]
 }) {
   const pathname = usePathname();
-
+  const [shouldShowNav, setShouldShowNav] = useState(pathname !== PATH_ADMIN_MAP_PHOTOS);
+  useEffect(() => {
+    setShouldShowNav(pathname !== PATH_ADMIN_MAP_PHOTOS);
+  }, [pathname]);
   return (
-    <SiteGrid
+    shouldShowNav && <SiteGrid
       contentMain={
         <div className={clsx(
           'flex gap-2 md:gap-4',
