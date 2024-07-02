@@ -37,8 +37,10 @@ export default function MapPhotos(){
       <Map
         defaultZoom={16}
         defaultCenter={ locations.length > 0 ? { lat: locations[0].location.lat, lng: locations[0].location.lng }: { lat: 25.03369, lng: 121.564128}}
-        onCameraChanged={ (ev: MapCameraChangedEvent) =>
-          console.log('camera changed:', ev.detail.center, 'zoom:', ev.detail.zoom)
+        onCameraChanged={ (ev: MapCameraChangedEvent) => {
+          // console.log('camera changed:', ev.detail.center, 'zoom:', ev.detail.zoom)
+        }
+          
         }
         mapId='da37f3254c6a6d1c'
         >
