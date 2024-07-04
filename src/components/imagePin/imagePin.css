@@ -30,7 +30,9 @@
 }
 .img>img {
   border-radius: 5px;
+  width: 57px;
   height: 57px;
+  object-fit: cover;
 }
 
 @media (max-width: 768px) {
