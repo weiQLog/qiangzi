@@ -51,6 +51,8 @@ export interface MapPhotosIp {
     latitude: number; // 纬度
     longitude: number; // 经度
     photo_url: string; // 图片地址
+    ip_latitude: number;  // ip纬度
+    ip_longitude: number; // ip 经度
 }
 
 export interface PhotoIpDbInsert extends IpInfoDB{

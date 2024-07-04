@@ -26,7 +26,6 @@ export default function MapPhotos(){
         };
         return poi;
       })
-      console.log('locations', locations);
       setLocations(locations);
     });
   }, []);

@@ -13,6 +13,7 @@ import { parameterize } from '@/utility/string';
 import { Tags } from '@/tag';
 import { FilmSimulation, FilmSimulations } from '@/simulation';
 import { PRIORITY_ORDER_ENABLED } from '@/site/config';
+import { latlngInfo } from '@/utility/client';
 
 const PHOTO_DEFAULT_LIMIT = 100;
 
@@ -59,7 +60,8 @@ const sqlCreatePhotosTable = () =>
       hidden BOOLEAN,
       updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-      ip character varying COLLATE pg_catalog."default"
+      ip character varying COLLATE pg_catalog."default",
+      country_short varchar default 'CN'::character varying not null
     )
   `;
 
@@ -105,7 +107,8 @@ export const sqlInsertPhoto = (photo: PhotoDbInsert) =>
       hidden,
       taken_at,
       taken_at_naive,
-      ip
+      ip,
+      country_short
     )
     VALUES (
       ${photo.id},
@@ -133,7 +136,8 @@ export const sqlInsertPhoto = (photo: PhotoDbInsert) =>
       ${photo.hidden},
       ${photo.takenAt},
       ${photo.takenAtNaive},
-      ${photo.ip}
+      ${photo.ip},
+      ${photo.country_short}
     )
   `);
 /**
@@ -168,7 +172,9 @@ export const sqlUpdatePhoto = (photo: PhotoDbInsert) =>
     hidden=${photo.hidden},
     taken_at=${photo.takenAt},
     taken_at_naive=${photo.takenAtNaive},
-    updated_at=${(new Date()).toISOString()}
+    updated_at=${(new Date()).toISOString()},
+    ip=${photo.ip},
+    country_short=${photo.country_short}
     WHERE id=${photo.id}
   `);
 
@@ -588,3 +594,7 @@ export const getPhotosFilmSimulationDateRange =
     sqlGetPhotosFilmSimulationDateRange(simulation));
 export const getPhotosFilmSimulationCount = (simulation: FilmSimulation) =>
   safelyQueryPhotos(() => sqlGetPhotosFilmSimulationCount(simulation));
+
+export async function latlngInfoService(latlng: string): Promise<string | null>  {
+  return latlngInfo(latlng);
+}

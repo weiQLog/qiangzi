@@ -7,6 +7,7 @@ import {
   sqlUpdatePhoto,
   sqlRenamePhotoTagGlobally,
   getPhoto,
+  latlngInfoService,
 } from '@/services/vercel-postgres'
 
 import {
@@ -38,7 +39,7 @@ import { streamClaudeAiImageQuery } from '@/services/claudeai'
 import { NextApiRequest, NextApiResponse } from 'next/types'
 import { getIp, sqlInsertPhotosIp } from '@/services/photoIp'
 import { sql } from '@vercel/postgres'
-import { ipInfo } from '@/utility/client';
+import { ipInfo } from '@/utility/client'
 
 /**
  * 上传相片
@@ -54,20 +55,32 @@ export async function createPhotoAction(formData: FormData) {
       photo.url = updatedUrl
     }
     try {
-      sql`BEGIN`;
-      console.log(`查看formData:`, photo);
+      sql`BEGIN`
+      if (photo.latitude && photo.longitude) {
+        let latlng = `${photo.latitude},${photo.longitude}`
+        let xmlText = await latlngInfoService(latlng)
+        if (xmlText) {
+          let parser = new DOMParser()
+          let xmlDoc = parser.parseFromString(xmlText, 'text/xml')
+          const countryNode = xmlDoc.querySelector('result > type:only-of-type(country) + address_component > short_name');
+          const countryShortName = countryNode ? countryNode.textContent : 'Unknown';
+          console.log("国家是：", countryShortName);
+        }
+      } else {
+        photo.country_short = 'CN'
+      }
       await sqlInsertPhoto(photo)
       // 获取客户端ip
-      let ipInfo = await getIp(formData.get('ip') as string);
-      if(ipInfo.rowCount === 0)
+      let ipInfo = await getIp(formData.get('ip') as string)
+      if (ipInfo.rowCount === 0)
         await sqlInsertPhotosIp(photo, formData.get('ip') as string)
-      await sql`COMMIT`;
+      await sql`COMMIT`
     } catch (err) {
-      await sql`ROLLBACK`;
+      await sql`ROLLBACK`
     } finally {
       // redirect 不能在try catch中调用！
       revalidateAllKeysAndPaths()
-      console.log(`重定向 ${PATH_ADMIN_PHOTOS}`);
+      console.log(`重定向 ${PATH_ADMIN_PHOTOS}`)
       redirect(PATH_ADMIN_PHOTOS)
     }
   })
@@ -76,7 +89,7 @@ export async function createPhotoAction(formData: FormData) {
 /**
  * 修改操作
  * @param formData 修改内容
- * @returns 
+ * @returns
  */
 export async function updatePhotoAction(formData: FormData) {
   return safelyRunAdminServerAction(async () => {
@@ -111,11 +124,11 @@ export async function toggleFavoritePhotoAction(
 }
 
 /**
- * 
+ *
  * @param photoId 删除相片
  * @param photoUrl 删除相片
- * @param shouldRedirect 
- * @returns 
+ * @param shouldRedirect
+ * @returns
  */
 export async function deletePhotoAction(
   photoId: string,

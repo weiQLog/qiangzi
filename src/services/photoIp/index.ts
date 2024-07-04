@@ -220,13 +220,18 @@ export const getAllMapPhotos = () => {
         )
         SELECT
           e.ip,
-          e.latitude,
-          e.longitude,
+          e.latitude as ip_latitude,
+          e.longitude as ip_longitude,
+          p.latitude,
+          p.longitude,
           p.url as photo_url
         FROM
           earliest_photos e
           INNER JOIN photos_ip pi ON e.ip = pi.ip
-          INNER JOIN photos p ON pi.ip = p.ip AND p.created_at = e.earliest_created_at;
+          INNER JOIN photos p ON pi.ip = p.ip AND p.created_at = e.earliest_created_at
+        WHERE
+          p.latitude IS NOT NULL
+          AND p.longitude IS NOT NULL;
     `
       await db.connect();
       const result = await db.query<MapPhotosIp>(sql)
