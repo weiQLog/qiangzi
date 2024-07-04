@@ -18,7 +18,7 @@
   grid-template-rows: repeat(4, 1fr);
   box-shadow: rgba(100, 100, 111, 0.3) 0px 7px 29px 0px;
   background-color: #fff;
-  padding: 2px;
+  padding: 1px;
   box-sizing: border-box;
   border-radius: 5px;
 }
