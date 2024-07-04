@@ -139,7 +139,8 @@ const FORM_METADATA = (
     selectOptions: undefined,
     selectOptionsDefaultLabel: undefined,
     tagOptions: undefined
-  }
+  },
+  country_short: { label: '' }
 });
 
 export const FORM_METADATA_ENTRIES = (

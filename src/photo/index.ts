@@ -57,7 +57,7 @@ export interface PhotoDbInsert extends PhotoExif {
   takenAt: string
   takenAtNaive: string,
   ip: string,
-  country_short: string,
+  country_short?: string,
 }
 
 // Raw db response
